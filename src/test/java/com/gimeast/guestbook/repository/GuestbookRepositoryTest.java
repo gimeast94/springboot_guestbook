@@ -1,8 +1,8 @@
 package com.gimeast.guestbook.repository;
 
 import com.gimeast.guestbook.data.dto.SearchStatus;
-import com.gimeast.guestbook.data.entity.GuestBook;
-import com.gimeast.guestbook.data.entity.QGuestBook;
+import com.gimeast.guestbook.data.entity.Guestbook;
+import com.gimeast.guestbook.data.entity.QGuestbook;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.junit.jupiter.api.Assertions;
@@ -29,7 +29,7 @@ public class GuestbookRepositoryTest {
     void 더미_데이터_생성() throws Exception {
 
         IntStream.rangeClosed(1, 300).forEach(i -> {
-            GuestBook guestBook = GuestBook.builder()
+            Guestbook guestBook = Guestbook.builder()
                     .title("Title...." + i)
                     .content("Content" + i)
                     .writer("user" + (i%10))
@@ -45,7 +45,7 @@ public class GuestbookRepositoryTest {
         더미_데이터_생성();
 
         //when
-        GuestBook guestbook = guestbookRepository.findById(1L).orElseThrow(() ->
+        Guestbook guestbook = guestbookRepository.findById(1L).orElseThrow(() ->
                 new IllegalArgumentException("해당 글은 존재하지 않습니다."));
 
         guestbook.changeGuestbook("change title...", "change content...");
@@ -61,7 +61,7 @@ public class GuestbookRepositoryTest {
 
         //when
         Pageable pageable = PageRequest.of(0, 10, Sort.by("gno").descending());
-        QGuestBook qGuestbook = QGuestBook.guestBook;
+        QGuestbook qGuestbook = QGuestbook.guestbook;
 
         String keyword = "1";
         BooleanBuilder builder = new BooleanBuilder();
@@ -69,7 +69,7 @@ public class GuestbookRepositoryTest {
         BooleanExpression exTitle = qGuestbook.title.contains(keyword);
         builder.and(exTitle);
 
-        Page<GuestBook> result = guestbookRepository.findAll(builder, pageable);
+        Page<Guestbook> result = guestbookRepository.findAll(builder, pageable);
 
         //then
         System.out.println("=================================");
@@ -90,7 +90,7 @@ public class GuestbookRepositoryTest {
 
         //when
         Pageable pageable = PageRequest.of(0, 10, Sort.by("gno").descending());
-        QGuestBook qGuestbook = QGuestBook.guestBook;
+        QGuestbook qGuestbook = QGuestbook.guestbook;
 
         String keyword = "1";
         BooleanBuilder builder = new BooleanBuilder();
@@ -101,7 +101,7 @@ public class GuestbookRepositoryTest {
         builder.and(exAll);
         builder.and(qGuestbook.gno.gt(0L));
 
-        Page<GuestBook> result = guestbookRepository.findAll(builder, pageable);
+        Page<Guestbook> result = guestbookRepository.findAll(builder, pageable);
 
         //then
         System.out.println("=================================");
@@ -123,7 +123,7 @@ public class GuestbookRepositoryTest {
 
         //when
         Pageable pageable = PageRequest.of(0, 10);
-        Page<GuestBook> result = guestbookRepository.findBySearch(new SearchStatus("1",null), pageable);
+        Page<Guestbook> result = guestbookRepository.findBySearch(new SearchStatus("1",null), pageable);
 
         //then
         System.out.println("=================================");

@@ -1,8 +1,8 @@
 package com.gimeast.guestbook.repository.querydsl.impl;
 
-import com.gimeast.guestbook.data.entity.GuestBook;
-import com.gimeast.guestbook.data.entity.QGuestBook;
+import com.gimeast.guestbook.data.entity.Guestbook;
 import com.gimeast.guestbook.data.dto.SearchStatus;
+import com.gimeast.guestbook.data.entity.QGuestbook;
 import com.gimeast.guestbook.repository.querydsl.GuestbookRepositoryCustom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,15 +15,15 @@ import java.util.List;
 public class GuestbookRepositoryCustomImpl extends QuerydslRepositorySupport implements GuestbookRepositoryCustom {
 
     public GuestbookRepositoryCustomImpl() {
-        super(GuestBook.class);
+        super(Guestbook.class);
     }
 
 
     @Override
-    public Page<GuestBook> findBySearch(SearchStatus status, Pageable pageable) {
-        QGuestBook qGuestbook = QGuestBook.guestBook;
+    public Page<Guestbook> findBySearch(SearchStatus status, Pageable pageable) {
+        QGuestbook qGuestbook = QGuestbook.guestbook;
 
-        List<GuestBook> guestbookList = from(qGuestbook)
+        List<Guestbook> guestbookList = from(qGuestbook)
                 .where(
                         !StringUtils.hasText(status.getTitle()) ? null : qGuestbook.title.likeIgnoreCase("%" + status.getTitle() + "%")
                                 .or(
