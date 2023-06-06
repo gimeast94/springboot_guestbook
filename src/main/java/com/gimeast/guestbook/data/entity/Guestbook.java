@@ -1,4 +1,4 @@
-package com.gimeast.guestbook.entity;
+package com.gimeast.guestbook.data.entity;
 
 import lombok.*;
 
@@ -23,4 +23,10 @@ public class GuestBook extends BaseEntity{
 
     @Column(length = 50, nullable = false)
     private String writer;
+
+
+    public void changeGuestbook(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }
