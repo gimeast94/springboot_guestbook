@@ -1,8 +1,12 @@
 package com.gimeast.guestbook.repository;
 
+import com.gimeast.guestbook.data.dto.GuestbookDto;
+import com.gimeast.guestbook.data.dto.PageRequestDto;
+import com.gimeast.guestbook.data.dto.PageResultDto;
 import com.gimeast.guestbook.data.dto.SearchStatus;
 import com.gimeast.guestbook.data.entity.Guestbook;
 import com.gimeast.guestbook.data.entity.QGuestbook;
+import com.gimeast.guestbook.service.GuestbookService;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.junit.jupiter.api.Assertions;
@@ -24,6 +28,9 @@ public class GuestbookRepositoryTest {
 
     @Autowired
     private GuestbookRepository guestbookRepository;
+
+    @Autowired
+    private GuestbookService guestbookService;
 
     @Test
     void 더미_데이터_생성() throws Exception {
@@ -137,7 +144,32 @@ public class GuestbookRepositoryTest {
 
     }
 
+    @Test
+    void 페이징_목록조회() throws Exception {
+        //given
+        더미_데이터_생성();
 
+        //when
+        PageRequestDto pageRequestDto = PageRequestDto.builder()
+                .page(1)
+                .size(10)
+                .build();
+
+        PageResultDto<GuestbookDto, Guestbook> resultDto = guestbookService.getList(pageRequestDto);
+
+        System.out.println("PREV : " + resultDto.isPrev());
+        System.out.println("NEXT : " + resultDto.isNext());
+        System.out.println("TOTAL : " + resultDto.getTotalPage());
+
+        //then
+        System.out.println("===========================================");
+        for(GuestbookDto guestbookDto : resultDto.getDtoList()) {
+            System.out.println(guestbookDto);
+        }
+        System.out.println("===========================================");
+        resultDto.getPageList().forEach(i -> System.out.println(i));
+
+    }
 
 
 

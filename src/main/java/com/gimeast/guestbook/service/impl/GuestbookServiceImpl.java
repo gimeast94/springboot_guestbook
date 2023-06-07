@@ -1,11 +1,19 @@
 package com.gimeast.guestbook.service.impl;
 
 import com.gimeast.guestbook.data.dto.GuestbookDto;
+import com.gimeast.guestbook.data.dto.PageRequestDto;
+import com.gimeast.guestbook.data.dto.PageResultDto;
+import com.gimeast.guestbook.data.dto.SearchStatus;
 import com.gimeast.guestbook.data.entity.Guestbook;
 import com.gimeast.guestbook.repository.GuestbookRepository;
 import com.gimeast.guestbook.service.GuestbookService;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.function.Function;
 
 @Service
 @Log4j2
@@ -28,10 +36,17 @@ public class GuestbookServiceImpl implements GuestbookService {
         return guestBook.getGno();
     }
 
+    @Override
+    public PageResultDto<GuestbookDto, Guestbook> getList(PageRequestDto requestDto) {
 
+        Pageable pageable = requestDto.getPageable(Sort.by("gno").descending());
+//        Page<Guestbook> result = guestbookRepository.findAll(pageable);
+        Page<Guestbook> result = guestbookRepository.findBySearch(new SearchStatus("", ""), pageable);
 
+        Function<Guestbook, GuestbookDto> fn = (entity -> entityToDto(entity));
 
-
+        return new PageResultDto<>(result, fn);
+    }
 
 
 }
