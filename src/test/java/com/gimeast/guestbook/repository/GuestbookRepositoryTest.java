@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -33,6 +34,7 @@ public class GuestbookRepositoryTest {
     private GuestbookService guestbookService;
 
     @Test
+    @Rollback(value = false)
     void 더미_데이터_생성() throws Exception {
 
         IntStream.rangeClosed(1, 300).forEach(i -> {
