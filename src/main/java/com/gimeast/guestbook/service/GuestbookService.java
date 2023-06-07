@@ -53,5 +53,23 @@ public interface GuestbookService {
      */
     PageResultDto<GuestbookDto, Guestbook> getList(PageRequestDto requestDto);
 
+    /**
+     * 상세페이지 조회
+     * @param gno
+     * @return
+     */
     GuestbookDto read(Long gno);
+
+    /**
+     * 글 삭제
+     * @param gno
+     */
+    void remove(Long gno);
+
+    /**
+     * 글 수정
+     * @param guestbookDto
+     */
+    void modify(GuestbookDto guestbookDto);
+    
 }

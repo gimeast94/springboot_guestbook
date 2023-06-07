@@ -26,7 +26,7 @@
             <tbody>
             <tr th:each="dto : ${result.dtoList}">
                 <th scope="row">
-                    <a href="#" th:href="@{/guestbook/read(gno = ${dto.gno}, page= ${result.page}, size=${result.size})}">
+                    <a href="#" th:href="@{/guestbook/read(gno = ${dto.gno}, page= ${result.page}, size=${result.size}, flag='R')}">
                         [[${dto.gno}]]
                     </a>
                 </th>
