@@ -12,11 +12,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
 @Log4j2
+@Transactional
 public class GuestbookServiceImpl implements GuestbookService {
 
     private final GuestbookRepository guestbookRepository;
@@ -46,6 +49,13 @@ public class GuestbookServiceImpl implements GuestbookService {
         Function<Guestbook, GuestbookDto> fn = (entity -> entityToDto(entity));
 
         return new PageResultDto<>(result, fn);
+    }
+
+    @Override
+    public GuestbookDto read(Long gno) {
+        Optional<Guestbook> result = guestbookRepository.findById(gno);
+
+        return result.isPresent() ? entityToDto(result.get()) : null;
     }
 
 
