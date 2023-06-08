@@ -4,11 +4,11 @@ import lombok.Data;
 
 @Data
 public class SearchStatus {
-    private String title;
-    private String content;
+    private String type;
+    private String keyword;
 
-    public SearchStatus(String title, String content) {
-        this.title = title;
-        this.content = content;
+    public SearchStatus(String type, String keyword) {
+        this.type = type;
+        this.keyword = keyword;
     }
 }

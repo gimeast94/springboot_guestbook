@@ -3,6 +3,7 @@ package com.gimeast.guestbook.service;
 import com.gimeast.guestbook.data.dto.GuestbookDto;
 import com.gimeast.guestbook.data.dto.PageRequestDto;
 import com.gimeast.guestbook.data.dto.PageResultDto;
+import com.gimeast.guestbook.data.dto.SearchStatus;
 import com.gimeast.guestbook.data.entity.Guestbook;
 
 public interface GuestbookService {
@@ -51,7 +52,7 @@ public interface GuestbookService {
      * @param requestDto
      * @return
      */
-    PageResultDto<GuestbookDto, Guestbook> getList(PageRequestDto requestDto);
+    PageResultDto<GuestbookDto, Guestbook> getList(PageRequestDto requestDto, SearchStatus status);
 
     /**
      * 상세페이지 조회

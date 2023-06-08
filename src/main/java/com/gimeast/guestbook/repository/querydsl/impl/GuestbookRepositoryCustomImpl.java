@@ -4,6 +4,7 @@ import com.gimeast.guestbook.data.entity.Guestbook;
 import com.gimeast.guestbook.data.dto.SearchStatus;
 import com.gimeast.guestbook.data.entity.QGuestbook;
 import com.gimeast.guestbook.repository.querydsl.GuestbookRepositoryCustom;
+import com.querydsl.core.BooleanBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -23,14 +24,24 @@ public class GuestbookRepositoryCustomImpl extends QuerydslRepositorySupport imp
     public Page<Guestbook> findBySearch(SearchStatus status, Pageable pageable) {
         QGuestbook qGuestbook = QGuestbook.guestbook;
 
-        List<Guestbook> guestbookList = from(qGuestbook)
-                .where(
-                        !StringUtils.hasText(status.getTitle()) ? null : qGuestbook.title.likeIgnoreCase("%" + status.getTitle() + "%")
-                                .or(
-                                        !StringUtils.hasText(status.getContent()) ? null : qGuestbook.content.likeIgnoreCase("%" + status.getContent() + "%")
-                                )
+        BooleanBuilder condition = new BooleanBuilder();
 
-                )
+        if (StringUtils.hasText(status.getKeyword()) && StringUtils.hasText(status.getType())) {
+            if (status.getType().contains("t")) {
+                condition.or(qGuestbook.title.likeIgnoreCase("%" + status.getKeyword() + "%"));
+            }
+
+            if (status.getType().contains("c")) {
+                condition.or(qGuestbook.content.likeIgnoreCase("%" + status.getKeyword() + "%"));
+            }
+
+            if (status.getType().contains("w")) {
+                condition.or(qGuestbook.writer.likeIgnoreCase("%" + status.getKeyword() + "%"));
+            }
+        }
+
+        List<Guestbook> guestbookList = from(qGuestbook)
+                .where(condition)
                 .offset(pageable.getOffset())// page 번호
                 .limit(pageable.getPageSize())// page size
                 .orderBy(qGuestbook.gno.desc())
@@ -38,10 +49,7 @@ public class GuestbookRepositoryCustomImpl extends QuerydslRepositorySupport imp
 
         Long count = from(qGuestbook)
                 .select(qGuestbook.count())
-                .where(
-                        !StringUtils.hasText(status.getTitle()) ? null : qGuestbook.title.likeIgnoreCase("%" + status.getTitle() + "%"),
-                        !StringUtils.hasText(status.getContent()) ? null : qGuestbook.content.likeIgnoreCase("%" + status.getContent() + "%")
-                )
+                .where(condition)
                 .orderBy(qGuestbook.gno.desc())
                 .fetchOne();
 

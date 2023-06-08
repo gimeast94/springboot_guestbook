@@ -132,7 +132,7 @@ public class GuestbookRepositoryTest {
 
         //when
         Pageable pageable = PageRequest.of(0, 10);
-        Page<Guestbook> result = guestbookRepository.findBySearch(new SearchStatus("1",null), pageable);
+        Page<Guestbook> result = guestbookRepository.findBySearch(new SearchStatus("t","1"), pageable);
 
         //then
         System.out.println("=================================");
@@ -157,7 +157,7 @@ public class GuestbookRepositoryTest {
                 .size(10)
                 .build();
 
-        PageResultDto<GuestbookDto, Guestbook> resultDto = guestbookService.getList(pageRequestDto);
+        PageResultDto<GuestbookDto, Guestbook> resultDto = guestbookService.getList(pageRequestDto, new SearchStatus("t","1"));
 
         System.out.println("PREV : " + resultDto.isPrev());
         System.out.println("NEXT : " + resultDto.isNext());
